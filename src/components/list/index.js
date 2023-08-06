@@ -12,7 +12,7 @@ export function List({ data }) {
     return (
         <TouchableOpacity style={styles.container} onPress={handleNavigate}>
             <Image
-                source={{ uri: data.url }}
+                source={{ uri: data.imageLink }}
                 style={styles.image}
             />
             <View style={styles.info}>
