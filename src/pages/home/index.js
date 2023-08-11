@@ -5,21 +5,26 @@ import { Ionicons } from '@expo/vector-icons'
 import { List } from '../../components/list'
 
 
+import api from '../../services/api';
+
 export function Home() {
     const [imputValue, setImputvalue] = useState('')
+    const [data, setData] = useState('')
 
     useEffect(() => {
-        function fetchData() {
-            console.log('vrox')
+        async function fetchData() {
+            const result = await api.get("/foods")
+            console.log(result.data)
+            setData(result.data)
         }
-        fetchData
+        fetchData();
     }, [])
 
     function handleSeach() {
         console.log(imputValue)
     }
 
-    const api = [
+    const db = [
         {
             id: 1,
             name: 'Macarrão',
@@ -237,7 +242,7 @@ export function Home() {
                 </TouchableOpacity>
             </View>
             <FlatList
-                data={api}
+                data={data}
                 keyExtractor={(item) => String(item.id)}
                 renderItem={({ item }) => <List data={item} />}
                 showsHorizontalScrollIndicator={false}

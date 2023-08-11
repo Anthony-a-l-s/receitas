@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView, Image, Modal } from 'react-native'
+import { View, Text, StyleSheet, Pressable, ScrollView, Image, Modal, Share } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Entypo, AntDesign, Feather } from '@expo/vector-icons'
 import { Ingredients } from '../../components/ingredients'
@@ -7,10 +7,14 @@ import { Instructions } from '../../components/instructions'
 import { VideoView } from '../../components/videoView'
 
 
+
+
 export function Details() {
 
     const route = useRoute();
     const navigation = useNavigation();
+
+    const [showVideo, setShowVideo] = useState(false)
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -28,7 +32,18 @@ export function Details() {
     }, [navigation, route.params?.data])
 
     function handleOpenVideo (){
-        console.log('Vrox')
+        setShowVideo(true)
+    }
+
+    async function shareReceipe (){
+        try{
+            await Share.share({
+                url: "https://sujeitoprogramador.com",
+                message:   `Receita: ${route.params?.data.name}\n Ingredientes: ${route.params?.data.numeroIngredientes}\nVi lá no app Minhas receitas`
+            }) 
+        }catch(error){
+            console.log(error);
+        }
     }
 
     return (
@@ -38,7 +53,7 @@ export function Details() {
                     <AntDesign name='playcircleo' size={48} color='#FAFAFA' />
                 </View>
                 <Image
-                    source={{ uri: route.params?.data.imageLink }}
+                    source={{ uri: route.params?.data.cover }}
                     style={styles.imageLink}
 
                 />
@@ -46,9 +61,9 @@ export function Details() {
             <View style={styles.headerDetails}>
                 <View>
                     <Text style={styles.title}>{route.params?.data.name}</Text>
-                    <Text style={styles.ingredientsText}>ingredientes ({route.params?.data.numeroIngredientes})</Text>
+                    <Text style={styles.ingredientsText}>ingredientes ({route.params?.data.total_ingredients})</Text>
                 </View>
-                <Pressable>
+                <Pressable onPress={shareReceipe}>
                     <Feather name='share-2' size={24} color='#121212' />
                 </Pressable>
             </View>
@@ -67,8 +82,11 @@ export function Details() {
                 <Instructions key={item.id} data={item} index={index}/>
             ))}
 
-            <Modal visible={false}>
-                <VideoView/>
+            <Modal visible={showVideo} animationType='slide'>
+                <VideoView
+                  handleClose={()=> setShowVideo(false) }
+                  videoUrl={route.params?.data.video}
+                />
             </Modal>
 
         </ScrollView >
