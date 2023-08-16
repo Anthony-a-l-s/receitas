@@ -1,8 +1,21 @@
-import {View, Text, StyleSheet} from 'react-native'
+import {Text, StyleSheet} from 'react-native'
+
+import {View} from 'moti'
 
 export function Logo(){
     return(
-        <View style={styles.logArea}>
+        <View style={styles.logArea}from={{
+            opacity: 0,
+            translateX: -50,
+        }}
+            animate={{
+                opacity: 1,
+                translateX: 0,
+            }}
+            transition={{
+                type: "spring",
+                duration: 850
+            }}>
             <Text style={styles.textLogo}>Minhas Receitas</Text>
         </View>
     )

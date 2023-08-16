@@ -10,8 +10,8 @@ export function List({ data }) {
         navigation.navigate('Details', {data: data})
     }
     return (
-        <>
-       {data?(<TouchableOpacity style={styles.container} onPress={handleNavigate}>
+     
+       <TouchableOpacity style={styles.container} onPress={handleNavigate}>
             <Image
                 source={{ uri: data.cover }}
                 style={styles.image}
@@ -24,8 +24,7 @@ export function List({ data }) {
                 colors={['transparent', 'rgba(0,0,0,0.70)', 'rgba(0,0,0,0.90)']}
             />
         </TouchableOpacity>
-    ):(<Text>Sem nenhuma receita disponível</Text>)}
-    </>
+   
     );
 
 }

@@ -5,6 +5,7 @@ import { Entypo, AntDesign, Feather } from '@expo/vector-icons'
 import { Ingredients } from '../../components/ingredients'
 import { Instructions } from '../../components/instructions'
 import { VideoView } from '../../components/videoView'
+import { isFavorite, saveFavorite, removeItem } from '../../utils/storage'
 
 
 
@@ -15,39 +16,64 @@ export function Details() {
     const navigation = useNavigation();
 
     const [showVideo, setShowVideo] = useState(false)
+    const [favorite, setFavorite] = useState(false)
 
     useLayoutEffect(() => {
+
+        async function getStatusFavorite() {
+            const receipFavorite = await isFavorite(route.params?.data)
+            setFavorite(receipFavorite)
+        }
+        getStatusFavorite();
         navigation.setOptions({
             title: route.params?.data ? route.params?.data.name : 'Dettalhes da receita',
             headerRight: () => (
-                <Pressable>
-                    <Entypo
-                        name='heart'
-                        size={28}
-                        color='#FF4141'
-                    />
+                <Pressable onPress={()=> handleFavoriteReceipe(route.params?.data)}>
+                    {favorite ? (
+                        <Entypo
+                            name='heart'
+                            size={28}
+                            color='#FF4141'
+                        />
+                    ) : (
+                        <Entypo
+                            name='heart-outlined'
+                            size={28}
+                            color='#FF4141'
+                        />
+                    )}
                 </Pressable>
             )
         })
-    }, [navigation, route.params?.data])
+    }, [navigation, route.params?.data, favorite])
 
-    function handleOpenVideo (){
+    async function handleFavoriteReceipe(receipe){
+        if(favorite){
+            await removeItem(receipe.id)
+            setFavorite(false)
+        }else{
+            await saveFavorite("@appreceitas", receipe)
+            setFavorite(true)
+        }
+    }
+
+    function handleOpenVideo() {
         setShowVideo(true)
     }
 
-    async function shareReceipe (){
-        try{
+    async function shareReceipe() {
+        try {
             await Share.share({
                 url: "https://sujeitoprogramador.com",
-                message:   `Receita: ${route.params?.data.name}\n Ingredientes: ${route.params?.data.numeroIngredientes}\nVi lá no app Minhas receitas`
-            }) 
-        }catch(error){
+                message: `Receita: ${route.params?.data.name}\n Ingredientes: ${route.params?.data.total_ingredients}\nVi lá no app Minhas receitas`
+            })
+        } catch (error) {
             console.log(error);
         }
     }
 
     return (
-        <ScrollView contentContainerStyle = {{padding: 14}} style={styles.container} showsHorizontalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={{ padding: 14 }} style={styles.container} showsHorizontalScrollIndicator={false}>
             <Pressable onPress={handleOpenVideo}>
                 <View style={styles.playIcon}>
                     <AntDesign name='playcircleo' size={48} color='#FAFAFA' />
@@ -73,19 +99,19 @@ export function Details() {
             <View style={styles.istructionArea}>
                 <Text style={styles.istructionsText}>Modo de preparo</Text>
                 <Feather
-                name='arrow-down'
-                size={24}
-                color='#fff'
+                    name='arrow-down'
+                    size={24}
+                    color='#fff'
                 />
             </View>
             {route.params?.data.instructions.map((item, index) => (
-                <Instructions key={item.id} data={item} index={index}/>
+                <Instructions key={item.id} data={item} index={index} />
             ))}
 
             <Modal visible={showVideo} animationType='slide'>
                 <VideoView
-                  handleClose={()=> setShowVideo(false) }
-                  videoUrl={route.params?.data.video}
+                    handleClose={() => setShowVideo(false)}
+                    videoUrl={route.params?.data.video}
                 />
             </Modal>
 
@@ -138,9 +164,9 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     istructionsText: {
-      fontSize: 18,
-      fontWeight: 500,
-      color: '#fff',
-      marginRight: 8
+        fontSize: 18,
+        fontWeight: 500,
+        color: '#fff',
+        marginRight: 8
     }
 })

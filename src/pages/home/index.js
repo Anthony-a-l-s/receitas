@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, Flat
 import { Logo } from '../../components/logo'
 import { Ionicons } from '@expo/vector-icons'
 import { List } from '../../components/list'
+import { useNavigation } from '@react-navigation/native'
+import { Text as MotiText } from 'moti'
 
 
 import api from '../../services/api';
@@ -10,226 +12,57 @@ import api from '../../services/api';
 export function Home() {
     const [imputValue, setImputvalue] = useState('')
     const [data, setData] = useState('')
+    const navigation = useNavigation();
 
     useEffect(() => {
         async function fetchData() {
             const result = await api.get("/foods")
-            console.log(result.data)
             setData(result.data)
         }
         fetchData();
     }, [])
 
     function handleSeach() {
-        console.log(imputValue)
-    }
-
-    const db = [
-        {
-            id: 1,
-            name: 'Macarrão',
-            imageLink: 'https://www.sabornamesa.com.br/media/k2/items/cache/665e96c29d55b13435d7a8d39deafe53_XL.jpg',
-            video: 'https://www.youtube.com/watch?v=kzI9HHOxi1I',
-            numeroIngredientes: 3,
-            ingredients: [
-                {
-                    id: 1,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                },
-                {
-                    id: 2,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                },
-                {
-                    id: 3,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                }
-            ],
-            instructions: [
-                {
-                    id: 1,
-                    description: 'Lavar'
-
-                },
-                {
-                    id: 2,
-                    description: 'Secar'
-                },
-                {
-                    id: 3,
-                    description: 'centrifugar'
-                }
-            ]
-
-
-        },
-        {
-            id: 2,
-            name: 'Strogonoff de frango',
-            imageLink: 'https://assets.unileversolutions.com/recipes-v2/54226.jpg',
-            video: 'https://www.youtube.com/watch?v=y9yKuT1m9LI',
-            numeroIngredientes: 3,
-            ingredients: [
-                {
-                    id: 1,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                },
-                {
-                    id: 2,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                },
-                {
-                    id: 3,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                }
-            ],
-            instructions: [
-                {
-                    id: 1,
-                    description: 'Lavar'
-
-                },
-                {
-                    id: 2,
-                    description: 'Secar'
-                },
-                {
-                    id: 3,
-                    description: 'centrifugar'
-                }
-            ]
-        },
-        {
-            id: 3,
-            name: 'Batata frita',
-            imageLink: 'https://www.tendaatacado.com.br/dicas/wp-content/uploads/2022/06/como-fazer-batata-frita-topo.jpg',
-            video: 'https://www.youtube.com/watch?v=HyTKGwD6RpQ',
-            numeroIngredientes: 3,
-            ingredients: [
-                {
-                    id: 1,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                },
-                {
-                    id: 2,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                },
-                {
-                    id: 3,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                }
-            ],
-            instructions: [
-                {
-                    id: 1,
-                    description: 'Lavar'
-
-                },
-                {
-                    id: 2,
-                    description: 'Secar'
-                },
-                {
-                    id: 3,
-                    description: 'centrifugar'
-                }
-            ]
-        },
-        {
-            id: 4,
-            name: 'Palha italiana',
-            imageLink: 'https://www.receiteria.com.br/wp-content/uploads/palha-italiana-rotated.jpg',
-            video: 'https://www.youtube.com/watch?v=RX_WnfgLYGs',
-            numeroIngredientes: 3,
-            ingredients: [
-                {
-                    id: 1,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                },
-                {
-                    id: 2,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                },
-                {
-                    id: 3,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                }
-            ],
-            instructions: [
-                {
-                    id: 1,
-                    description: 'Lavar'
-
-                },
-                {
-                    id: 2,
-                    description: 'Secar'
-                },
-                {
-                    id: 3,
-                    description: 'centrifugar'
-                }
-            ]
-        },
-        {
-            id: 5,
-            name: 'Coxinha',
-            imageLink: 'https://receitinhas.com.br/wp-content/uploads/2017/12/coxinha-de-frango-com-queijo.jpg',
-            video: 'https://www.youtube.com/watch?v=pyslNp5YCj8',
-            numeroIngredientes: '3',
-            ingredients: [
-                {
-                    id: 1,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                },
-                {
-                    id: 2,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                },
-                {
-                    id: 3,
-                    name: 'Macarrão espaguete',
-                    amount: '250g',
-                }
-            ],
-            instructions: [
-                {
-                    id: 1,
-                    description: 'Lavar'
-
-                },
-                {
-                    id: 2,
-                    description: 'Secar'
-                },
-                {
-                    id: 3,
-                    description: 'centrifugar'
-                }
-            ]
+        if (!imputValue) {
+            return
         }
-
-    ]
+        let input = imputValue
+        setImputvalue("")
+        navigation.navigate("Search", { name: input })
+    }
 
 
     return (
         <SafeAreaView style={styles.container}>
             <Logo />
-            <Text style={styles.title}>Seu caderno de receitas</Text>
+            <MotiText style={styles.title} from={{
+                opacity: 0,
+                translateY: 15,
+            }}
+                animate={{
+                    opacity: 1,
+                    translateY: 0,
+                }}
+                transition={{
+                    delay: 100,
+                    type: "timing",
+                    duration: 650
+                }}
+            >Encontre a receita</MotiText>
+            <MotiText style={styles.title} from={{
+                opacity: 0,
+                translateY: 15,
+            }}
+                animate={{
+                    opacity: 1,
+                    translateY: 0,
+                }}
+                transition={{
+                    delay: 100,
+                    type: "timing",
+                    duration: 850
+                }}
+            >que combina com você</MotiText>
             <View style={styles.form}>
                 <TextInput
                     placeholder="Digite o nome da comida..."

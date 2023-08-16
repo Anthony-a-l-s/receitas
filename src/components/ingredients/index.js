@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 export function Ingredients({data}) {
     return (
         <View style={styles.container}>
-            <Text >{data.name}</Text>
+            <Text >{data.name_ingredient}</Text>
             <Text>{data.amount}</Text>
         </View>
     )
