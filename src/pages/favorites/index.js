@@ -28,7 +28,7 @@ export function Favorites(){
 
     return(
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Reeceitas favoritas</Text>
+            <Text style={styles.title}>Receitas Favoritas</Text>
             {receipes.length === 0 && (
                <Text>você não tem nenhum receita salva.</Text>
             )}
